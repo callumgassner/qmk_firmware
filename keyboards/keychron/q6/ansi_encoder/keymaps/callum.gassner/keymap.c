@@ -102,4 +102,34 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
+    if (!rgb_matrix_indicators_advanced_user(led_min, led_max)) {
+        return false;
+    }
+    // RGB_MATRIX_INDICATOR_SET_COLOR(index, red, green, blue);
+    if (layer_state_is(0) || layer_state_is(1)) {
+    #    if defined(CAPS_LOCK_LED_INDEX)
+        if (host_keyboard_led_state().caps_lock) {
+            RGB_MATRIX_INDICATOR_SET_COLOR(CAPS_LOCK_LED_INDEX, 0, 255, 0);
+        } else {
+            if (!rgb_matrix_get_flags()) {
+                RGB_MATRIX_INDICATOR_SET_COLOR(CAPS_LOCK_LED_INDEX, 0, 0, 0);
+            }
+        }
+    #    endif // CAPS_LOCK_LED_INDEX
+    #    if defined(NUM_LOCK_LED_INDEX)
+        if (host_keyboard_led_state().num_lock) {
+            RGB_MATRIX_INDICATOR_SET_COLOR(NUM_LOCK_LED_INDEX, 0, 255, 0);
+        } else {
+            if (!rgb_matrix_get_flags()) {
+                RGB_MATRIX_INDICATOR_SET_COLOR(NUM_LOCK_LED_INDEX, 0, 0, 0);
+            }
+        }
+    #    endif // NUM_LOCK_LED_INDEX
+        // return true;
+    }
+    return true;
+}
+
 #endif // RGB_MATRIX_ENABLE...
